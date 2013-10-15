@@ -1,8 +1,11 @@
 from django.shortcuts import render
 
+import praw
 import requests
 
 import authentication
+
+UA = """Reddit Account Nuker by u/_Daimon_."""
 
 
 def authorization_url():
@@ -12,12 +15,33 @@ def authorization_url():
     # that. Pretty hard to do anything bad to an already nuked account.
     params = {'client_id': authentication.CLIENT_ID, 'response_type': 'code',
               'redirect_uri': authentication.REDIRECT_URI,
-              'state': 'Dont Care', 'scope': ['identity', 'edit', 'history'],
+              'state': 'Dont Care', 'scope': 'identity,history',
               'refreshable': 'temporary'}
     request = requests.Request('GET', base_url, params=params)
     return request.prepare().url
 
 
 def index(request):
+    """Requesting the home page."""
     context = {'auth_url': authorization_url()}
     return render(request, 'undo/index.html', context)
+
+
+def nuking_account(request):
+    """The page where we reply with success/failure."""
+    user = None
+    error_message = None
+    try:
+        r = praw.Reddit(UA)
+        r.set_oauth_app_info(client_id=authentication.CLIENT_ID,
+                             client_secret=authentication.CLIENT_SECRET,
+                             redirect_uri=authentication.REDIRECT_URI)
+        r.get_access_information(request.GET['code'])
+        user = r.get_me().name
+    except praw.errors.OAuthInvalidGrant:
+        error_message = ("Cannot exchange code. Did you accept within 60 "
+                         "minutes or have you already used this code?")
+    except Exception, e:
+        error_message = e.message
+    context = {'identity': user, 'error_message': error_message}
+    return render(request, 'undo/nuking_account.html', context)
