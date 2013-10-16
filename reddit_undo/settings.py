@@ -5,16 +5,6 @@ import sys
 
 import authentication
 
-# Celery.
-import djcelery
-djcelery.setup_loader()
-
-CELERY_DISABLE_RATE_LIMITS = True
-
-# Simple somewhat hacky way of making sure that only one task is ever executed
-# at the same time. Thus ensuring reddits ratelimit is met.
-CELERYD_CONCURRENCY = 1
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -142,7 +132,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'undo',
-    'djcelery',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
