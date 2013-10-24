@@ -29,3 +29,15 @@ the database and see if there is any unprocessed jobs. This is a simple
 solution that does not involve any concurrency libraries and race situation
 will be handled by the database. Additionally since there's only a single PRAW
 instance running, following reddit's API rules become very simple.
+
+Schema
+------
+
+The database has the following fields, here shown populated with example data.
+
+.. code-block:: text
+
+  Id PRIMARY KEY INT | Username TEXT | Access_token TEXT | Gained_at INT
+  ----------------------------------------------------------------------
+  1                  | _Daimon_      | 12asf7asjn12as7   | 1382646830
+  2                  | circlejerk    | asd67iasfdku8af   | 1382642199
