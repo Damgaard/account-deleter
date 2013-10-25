@@ -16,9 +16,10 @@
       <h1>Reddit Account Deleter</h1>
       <hr>
       {% if not error_message %}
-        <p>The process of nuking the '{{ identity }}' account has begun.</p>
+        <p>The process of nuking the <em>'{{ identity }}'</em> account has
+        begun.</p>
       {% else %}
-      <p><strong>ERROR:</strong> {{ error_message }}.</p>
+        <p><strong>ERROR:</strong> {{ error_message }}.</p>
       {% endif %}
     </div>
   <div class="clear"></div>
