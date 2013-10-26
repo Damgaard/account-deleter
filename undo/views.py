@@ -37,10 +37,9 @@ def insert_into_db(reddit_session, username):
     with sqlite3.connect(DATABASES['default']['NAME']) as con:
         cur = con.cursor()
         cur.executescript("""
-            CREATE TABLE IF NOT EXISTS Redditors(Id INTEGER PRIMARY KEY,
-                                                Username TEXT,
-                                                Access_token TEXT,
-                                                Gained_at INT)
+            CREATE TABLE IF NOT EXISTS
+                    Redditors(Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                              Username TEXT, Access_token TEXT, Gained_at INT)
         """)
         access_token = reddit_session.access_token
         now = int(time.time())

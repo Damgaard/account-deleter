@@ -41,3 +41,7 @@ The database has the following fields, here shown populated with example data.
   ----------------------------------------------------------------------
   1                  | _Daimon_      | 12asf7asjn12as7   | 1382646830
   2                  | circlejerk    | asd67iasfdku8af   | 1382642199
+
+The Id is auto incremented. This makes it possible to see how many accounts
+have been nuked, while at at the same time not keeping any information about
+the redditor.
