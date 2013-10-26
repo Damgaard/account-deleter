@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.utils.datastructures import MultiValueDictKeyError
 
@@ -68,7 +69,10 @@ def nuking_account(request):
     except MultiValueDictKeyError:
         error_message = ("Didn't receive all parameters. Did you visit this "
                          "page directly?")
-    except Exception, e:
-        error_message = e.message
+    except Exception:
+        if settings.DEBUG:
+            raise
+        else:
+            error_message = "Unknown error type encountered. Try again?"
     context = {'identity': user, 'error_message': error_message}
     return render(request, 'undo/nuking_account.html', context)
