@@ -12,6 +12,7 @@ import praw
 import sqlite3
 
 import authentication
+from reddit_undo.settings import DATABASES
 
 
 def initialize_reddit_session():
@@ -25,7 +26,7 @@ def initialize_reddit_session():
 
 def run(reddit_session):
     scope = set(['identity', 'edit', 'history'])
-    with sqlite3.connect('main_database.db') as con:
+    with sqlite3.connect(DATABASES['default']['NAME']) as con:
         cur = con.cursor()
         cur.execute("SELECT * FROM Redditors")
         for row_id, username, access_token, gained_at in cur.fetchall():

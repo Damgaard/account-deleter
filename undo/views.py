@@ -7,6 +7,7 @@ import requests
 import sqlite3
 
 import authentication
+from reddit_undo.settings import DATABASES
 
 UA = """Reddit Account Nuker by u/_Daimon_."""
 
@@ -33,7 +34,7 @@ def index(request):
 def insert_into_db(reddit_session, username):
     """Insert information about the soon to be nuked user to the database."""
     # TODO: Unhardcode database name
-    with sqlite3.connect('main_database.db') as con:
+    with sqlite3.connect(DATABASES['default']['NAME']) as con:
         cur = con.cursor()
         cur.executescript("""
             CREATE TABLE IF NOT EXISTS Redditors(Id INTEGER PRIMARY KEY,
