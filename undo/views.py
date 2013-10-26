@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.utils.datastructures import MultiValueDictKeyError
 
 import time
 
@@ -64,6 +65,9 @@ def nuking_account(request):
     except praw.errors.OAuthInvalidGrant:
         error_message = ("Cannot exchange code. Did you accept within 60 "
                          "minutes or have you already used this code?")
+    except MultiValueDictKeyError:
+        error_message = ("Didn't receive all parameters. Did you visit this "
+                         "page directly?")
     except Exception, e:
         error_message = e.message
     context = {'identity': user, 'error_message': error_message}
