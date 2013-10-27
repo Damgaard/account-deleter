@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-from undo import views
+from deleter import views
 
 urlpatterns = patterns('',
     url(r'nuking_account/?$', views.nuking_account, name='nuke'),

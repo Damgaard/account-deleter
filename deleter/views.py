@@ -9,7 +9,7 @@ import requests
 import sqlite3
 
 import authentication
-from reddit_undo.settings import DATABASES
+from account_deleter.settings import DATABASES
 
 UA = """Reddit Account Nuker by u/_Daimon_."""
 
@@ -30,7 +30,7 @@ def authorization_url():
 def index(request):
     """Requesting the home page."""
     context = {'auth_url': authorization_url()}
-    return render(request, 'undo/index.html', context)
+    return render(request, 'deleter/index.html', context)
 
 
 def insert_into_db(reddit_session, username):
@@ -75,4 +75,4 @@ def nuking_account(request):
         else:
             error_message = "Unknown error type encountered. Try again?"
     context = {'identity': user, 'error_message': error_message}
-    return render(request, 'undo/nuking_account.html', context)
+    return render(request, 'deleter/nuking_account.html', context)

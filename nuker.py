@@ -12,7 +12,7 @@ import praw
 import sqlite3
 
 import authentication
-from reddit_undo.settings import DATABASES
+from account_deleter.settings import DATABASES
 
 
 def initialize_reddit_session():

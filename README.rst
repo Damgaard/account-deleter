@@ -14,11 +14,11 @@ this README is located in the root folder. Additionally this is also where
 `nuker.py` is located. This is a program that's run side-by-side with the
 website and handles the deletion process.
 
-The reddit_undo project folder contains files for the entire project. Such as
-the project wide settings and the main database.
+The account_deleter project folder contains files for the entire project. Such
+as the project wide settings and the main database.
 
-The 'undo' app is  located inside the undo folder. It is the only app on the
-website, so all views etc. are inside of it.
+The 'deleter' app is  located inside the deleter folder. It is the only app on
+the website, so all views etc. are inside of it.
 
 Finally the docs folder contain documentation.
 
