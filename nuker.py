@@ -33,8 +33,8 @@ from account_deleter.settings import DATABASES
 
 def main():
     reddit_session = initialize_reddit_session()
+    print "Initialized and starting main loop"
     while True:
-        print "Starting a run."
         run(reddit_session)
         time.sleep(5)
 
@@ -55,19 +55,29 @@ def run(reddit_session):
         cur = con.cursor()
         cur.execute("SELECT * FROM Redditors")
         for row_id, username, access_token, gained_at in cur.fetchall():
-            print row_id, username
+            print "Starting nuking of {} at row_id {}".format(username, row_id)
             reddit_session.set_access_credentials(scope=scope,
                                                   access_token=access_token)
             redditor = reddit_session.get_me()
+            limit = 900
             while True:
-#                del_submissions = [sub for sub in redditor.get_submitted(limit=5)]
-#                del_comments = [com for com in redditor.get_comments(limit=5)]
-                del_submissions = []
-                del_comments = []
-                if all([not del_submissions, not del_comments]):
+                submissions = list(redditor.get_submitted(limit=limit)) or []
+                comments = list(redditor.get_comments(limit=limit)) or []
+                for sub in submissions:
+                    sub.delete()
+                for com in comments:
+                    com.delete()
+                print "Subs", submissions
+                print "Com", comments
+                if not (len(submissions) == limit or len(comments) == limit):
                     break
-                time.sleep(reddit_session.config.cache_timeout)
+                wait_time = reddit_session.config.cache_timeout
+                wait_string = "Maybe more content. Waiting "
+                wait_string += "{} secs, then deleting ".format(wait_time)
+                print wait_string + "another batch."
+                time.sleep(wait_time)
             cur.execute("DELETE FROM Redditors WHERE Id == {};".format(row_id))
+            print "Succesfully nuked {}".format(username)
 
 
 if __name__ == '__main__':

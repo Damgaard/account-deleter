@@ -37,7 +37,7 @@ def authorization_url():
     # that. Pretty hard to do anything bad to an already nuked account.
     params = {'client_id': authentication.CLIENT_ID, 'response_type': 'code',
               'redirect_uri': authentication.REDIRECT_URI,
-              'state': 'Dont Care', 'scope': 'identity,history',
+              'state': 'Dont Care', 'scope': 'identity,edit,history',
               'refreshable': 'temporary'}
     request = requests.Request('GET', base_url, params=params)
     return request.prepare().url
