@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Creates the views for the deleter app."""
+
 from django.conf import settings
 from django.shortcuts import render
 from django.utils.datastructures import MultiValueDictKeyError
@@ -24,13 +26,12 @@ import requests
 import sqlite3
 
 import authentication
-from account_deleter.settings import DATABASES
 
 UA = """Reddit Account Nuker by u/_Daimon_."""
 
 
 def authorization_url():
-    """The url users will be sent to to authorize us to nuke their account."""
+    """Return the url users to send users to for authorization."""
     base_url = 'https://ssl.reddit.com/api/v1/authorize/'
     # The state parameter is to protect against CSRF. But we don't care about
     # that. Pretty hard to do anything bad to an already nuked account.
@@ -43,15 +44,14 @@ def authorization_url():
 
 
 def index(request):
-    """Requesting the home page."""
+    """Return the home page."""
     context = {'auth_url': authorization_url()}
     return render(request, 'deleter/index.html', context)
 
 
 def insert_into_db(reddit_session, username):
     """Insert information about the soon to be nuked user to the database."""
-    # TODO: Unhardcode database name
-    with sqlite3.connect(DATABASES['default']['NAME']) as con:
+    with sqlite3.connect(settings.DATABASES['default']['NAME']) as con:
         cur = con.cursor()
         cur.executescript("""
             CREATE TABLE IF NOT EXISTS
@@ -67,7 +67,7 @@ def insert_into_db(reddit_session, username):
 
 
 def nuking_account(request):
-    """The page where we reply with success/failure."""
+    """Return the page where we reply with success/failure."""
     user = None
     error_message = None
     try:

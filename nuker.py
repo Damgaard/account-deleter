@@ -19,6 +19,7 @@ Independent Script to handle nuking a Redditor.
 Continually running. Every 5 seconds, it polls the database to see if any
 redditor wants to be nuked. For every redditor that does it will delete all of
 their comments and submissions.
+
 """
 
 import time
@@ -30,9 +31,17 @@ import authentication
 from account_deleter.settings import DATABASES
 
 
+def main():
+    reddit_session = initialize_reddit_session()
+    while True:
+        print "Starting a run."
+        run(reddit_session)
+        time.sleep(5)
+
+
 def initialize_reddit_session():
-    UA = """Reddit Account Nuker by u/_Daimon_."""
-    r = praw.Reddit(UA)
+    """Return a connected reddit session."""
+    r = praw.Reddit("Reddit Account Nuker by u/_Daimon_.")
     r.set_oauth_app_info(client_id=authentication.CLIENT_ID,
                          client_secret=authentication.CLIENT_SECRET,
                          redirect_uri=authentication.REDIRECT_URI)
@@ -40,6 +49,7 @@ def initialize_reddit_session():
 
 
 def run(reddit_session):
+    """Delete all content made by redditors in the database."""
     scope = set(['identity', 'edit', 'history'])
     with sqlite3.connect(DATABASES['default']['NAME']) as con:
         cur = con.cursor()
@@ -61,8 +71,4 @@ def run(reddit_session):
 
 
 if __name__ == '__main__':
-    reddit_session = initialize_reddit_session()
-    while True:
-        print "Starting a run."
-        run(reddit_session)
-        time.sleep(5)
+    main()
